@@ -1,5 +1,10 @@
-import 'package:beauty_textfield/beauty_textfield.dart';
+// This source code is a part of Project Violet.
+// Copyright (C) 2021. violet-team. Licensed under the Apache-2.0 License.
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:violetweb/pages/login/signup_page.dart';
+import 'package:violetweb/server/violet.dart';
 
 class LoginPage extends StatelessWidget {
   final idController = TextEditingController();
@@ -28,9 +33,18 @@ class LoginPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _buildGroup(
-                    'Login',
-                    _loginArea(),
-                  )
+                    'Violet Web Service',
+                    _loginArea(context),
+                  ),
+                  Container(height: 16),
+                  Text(
+                    'Copyright (C) 2021. violet-team. Licensed under the Apache-2.0 License.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepPurple,
+                      fontSize: 10.0,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -86,70 +100,120 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _loginArea() {
+  _loginArea(context) {
     return [
+      // Container(height: 8),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            height: 60,
-            width: 300,
-            child: TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Id를 입력하세요';
-                } else
-                  return null;
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Id',
+            height: 40,
+            width: 280,
+            child: Theme(
+              data: new ThemeData(
+                primaryColor: Colors.purple,
+                primaryColorDark: Colors.purple,
+              ),
+              child: TextFormField(
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Id를 입력하세요';
+                  } else
+                    return null;
+                },
+                cursorColor: Colors.purple,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Id',
+                ),
               ),
             ),
           ),
         ],
       ),
+      Container(
+        height: 8,
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-            height: 60,
-            width: 300,
-            child: TextFormField(
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'PW를 입력하세요';
-                } else
-                  return null;
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Password',
+            height: 40,
+            width: 280,
+            child: Theme(
+              data: new ThemeData(
+                primaryColor: Colors.purple,
+                primaryColorDark: Colors.purple,
+              ),
+              child: TextFormField(
+                obscureText: true,
+                validator: (value) {
+                  print(value);
+                  if (value.isEmpty) {
+                    return 'PW를 입력하세요';
+                  } else
+                    return null;
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Password',
+                ),
               ),
             ),
           ),
         ],
       ),
-      // Row(children: [
-      //   Column(crossAxisAlignment: CrossAxisAlignment.start, children: []),
-      // ]),
-      Container(height: 8),
+      Container(height: 16),
       Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            child: RaisedButton(
-              color: Colors.purple.withAlpha(220),
-              textColor: Colors.white,
-              onPressed: () {
-                // Navigator.of(context)
-                //     .push(CupertinoPageRoute(builder: (_) => FAQPageKorean()));
+            padding: EdgeInsets.only(left: 8),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey,
+                elevation: 3.0,
+              ),
+              child: Text('Sign Up'),
+              onPressed: () async {
+                await Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => SignUpPage()));
               },
-              child: Text('자주 묻는 질문들'),
-              elevation: 3.0,
             ),
             height: 40,
-            width: 145,
+            width: 100,
+          ),
+          Container(
+            padding: EdgeInsets.only(right: 8),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.purple.withAlpha(220),
+                elevation: 3.0,
+              ),
+              child: Text('Login'),
+              onPressed: () async {
+                var v = await VioletServer.top(0, 100, 'daily');
+                await showDialog(
+                  context: context,
+                  builder: (BuildContext context) => CupertinoAlertDialog(
+                    title: new Text("Login Failed!"),
+                    content: new Text(v.toString()),
+                    // content: new Text("Please check your id or password!"),
+                    actions: <Widget>[
+                      CupertinoDialogAction(
+                        isDefaultAction: true,
+                        child: Text('OK'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+            height: 40,
+            width: 100,
           ),
         ],
       ),
