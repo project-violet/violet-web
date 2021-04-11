@@ -106,7 +106,7 @@ class SignUpPage extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancle'),
+              child: Text('Cancel'),
               elevation: 3.0,
             ),
             height: 40,
