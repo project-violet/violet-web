@@ -4,7 +4,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:violetweb/pages/login/signup_page.dart';
-import 'package:violetweb/server/violet.dart';
+import 'package:violetweb/server/wviolet.dart';
 
 class LoginPage extends StatelessWidget {
   final idController = TextEditingController();
