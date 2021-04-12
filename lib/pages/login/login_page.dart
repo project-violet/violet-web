@@ -8,6 +8,7 @@ import 'package:violetweb/server/violet.dart';
 
 class LoginPage extends StatelessWidget {
   final idController = TextEditingController();
+  final pwController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +127,7 @@ class LoginPage extends StatelessWidget {
                   border: OutlineInputBorder(),
                   labelText: 'Id',
                 ),
+                controller: idController,
               ),
             ),
           ),
@@ -158,6 +160,7 @@ class LoginPage extends StatelessWidget {
                   border: OutlineInputBorder(),
                   labelText: 'Password',
                 ),
+                controller: pwController,
               ),
             ),
           ),
@@ -192,13 +195,19 @@ class LoginPage extends StatelessWidget {
               ),
               child: Text('Login'),
               onPressed: () async {
-                var v = await VioletServer.top(0, 100, 'daily');
+                var v = await VioletServer.login(
+                    idController.text, pwController.text);
+                var title = "Login Failed!";
+                var body = "Please check your id or password!";
+                if (v['msg'] == 'success') {
+                  title = 'Login Success!';
+                  body = v['session'];
+                }
                 await showDialog(
                   context: context,
                   builder: (BuildContext context) => CupertinoAlertDialog(
-                    title: new Text("Login Failed!"),
-                    content: new Text(v.toString()),
-                    // content: new Text("Please check your id or password!"),
+                    title: new Text(title),
+                    content: new Text(body),
                     actions: <Widget>[
                       CupertinoDialogAction(
                         isDefaultAction: true,

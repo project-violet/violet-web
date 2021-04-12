@@ -5,11 +5,15 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:tuple/tuple.dart';
+import 'package:violetweb/server/wsalt.dart';
 
 class VioletServer {
-  static const protocol = 'https';
-  static const host = 'api.koromo.xyz';
-  static const api = '$protocol://$host';
+  // static const protocol = 'https';
+  // static const host = 'api.koromo.xyz';
+  // static const api = '$protocol://$host';
+  static const protocol = 'http';
+  static const host = '3.35.208.233';
+  static const api = '$protocol://$host/api';
 
   static Future<dynamic> top(int offset, int count, String type) async {
     var gg = await http
@@ -30,5 +34,21 @@ class VioletServer {
       print(st);
       return 900;
     }
+  }
+
+  static Future<dynamic> login(String id, String pw) async {
+    var vToken = DateTime.now().toUtc().millisecondsSinceEpoch;
+    var vValid = getValid(vToken.toString());
+
+    try {
+      var res = await http.post(Uri.parse('$api/community/sign/in'),
+          headers: {
+            'v-token': vToken.toString(),
+            'v-valid': vValid,
+            "Content-Type": "application/json"
+          },
+          body: jsonEncode({'Id': id, 'Password': pw}));
+      return jsonDecode(res.body);
+    } catch (e) {}
   }
 }

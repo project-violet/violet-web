@@ -31,6 +31,7 @@ dependencies:
   beauty_textfield:
   http:
   tuple:
+  crypto:
 
 dev_dependencies:
   flutter_test:
